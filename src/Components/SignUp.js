@@ -12,6 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import { API_URL } from "../config";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(7),
@@ -56,7 +58,7 @@ export default function SignUp() {
 
   async function doRegister(toInput) {
     console.log(JSON.stringify(toInput));
-    let response = await fetch("http://localhost:8080/api/sign-up", {
+    let response = await fetch(`${API_URL}sign-up`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

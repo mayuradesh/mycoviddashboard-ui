@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import { API_URL } from "../config";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(7),
@@ -45,33 +47,24 @@ export default function SignIn() {
   const handleUserNameChange = (event) => setName(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
 
-  const [message, setMessage] = React.useState("Nothing saved in the session");
+  const [errors, setErrors] = React.useState({});
 
   async function doLogin(toInput) {
-    // const response = await fetch("http://localhost:8080/api/sign-in", {
-    //   method: "POST", // *GET, POST, PUT, DELETE, etc.
-    //   // mode: "cors", // no-cors, *cors, same-origin
-    //   // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    //   // credentials: "same-origin", // include, *same-origin, omit
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   // redirect: "follow", // manual, *follow, error
-    //   // referrerPolicy: "no-referrer", // no-referrer, *client
-    //   body: JSON.stringify(toInput), // body data type must match "Content-Type" header
-    // });
-    const response = await fetch("http://localhost:8080/api/sign-in", {
+    let response = await fetch(`${API_URL}sign-in`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(toInput), // body data type must match "Content-Type" header
     });
-    console.log(response);
-    // let body = await response.json();
-    // console.log(body.id);
-    // setMessage(body.id ? "Login successful" : "Login Failed");
+    let body = await response.json();
+    if (!response.ok) {
+      console.log("Errors:", body);
+      setErrors(body);
+    } else {
+      console.log("Success:", body);
+      history.push("/dashboard");
+    }
   }
 
   const handleSubmit = (variables) => {
@@ -110,6 +103,8 @@ export default function SignIn() {
                 name="username"
                 autoComplete="username"
                 onChange={handleUserNameChange}
+                error={errors.username ? true : false}
+                helperText={errors.username}
               />
             </Grid>
             <Grid item xs={12}>
@@ -124,6 +119,8 @@ export default function SignIn() {
                 id="password"
                 label="Password"
                 onChange={handlePasswordChange}
+                error={errors.password ? true : false}
+                helperText={errors.password}
               />
             </Grid>
             

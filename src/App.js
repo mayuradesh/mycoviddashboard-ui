@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-import Table from "./Components/Table";
+import Table from "./Components/Dashboard";
 
 class App extends Component {
     render() {
@@ -10,7 +10,7 @@ class App extends Component {
             <Router>
                 <Route exact path="/" component={SignIn} />
                 <Route exact path="/signup" component={SignUp} />
-                <Route exact path="/view" component={Table} />
+                <Route exact path="/dashboard" component={Dashboard} />
             </Router>
         );
     }
