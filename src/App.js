@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-import Table from "./Components/Dashboard";
+import Dashboard from "./Components/Dashboard";
 
 class App extends Component {
     render() {

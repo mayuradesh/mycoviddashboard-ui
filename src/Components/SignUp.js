@@ -78,14 +78,9 @@ export default function SignUp() {
   const handleSubmit = (variables) => {
     const toInput = { name, surname, email, password };
     doRegister(toInput);
-    // setFirstName("");
-    // setLastName("");
-    // setEmail("");
-    // setPassword("");
   };
 
   if (firstLoad) {
-    // sampleFunc();
     setLoad(false);
   }
 

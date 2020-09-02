@@ -3,7 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import GroupIcon from "@material-ui/icons/Group";
 import Typography from "@material-ui/core/Typography";
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const [firstLoad, setLoad] = React.useState(true);
+  let history = useHistory();
 
   const [username, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -70,8 +71,6 @@ export default function SignIn() {
   const handleSubmit = (variables) => {
     const toInput = { username, password };
     doLogin(toInput);
-    setName("");
-    setPassword("");
   };
 
   if (firstLoad) {
