@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import { API_URL } from "../config";
+import ReactLoading from "react-loading";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  const [firstLoad, setLoad] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   let history = useHistory();
 
   const [name, setFirstName] = React.useState("");
@@ -58,6 +59,7 @@ export default function SignUp() {
 
   async function doRegister(toInput) {
     console.log(JSON.stringify(toInput));
+    setLoading(true);
     let response = await fetch(`${API_URL}sign-up`, {
       method: "POST",
       headers: {
@@ -66,6 +68,7 @@ export default function SignUp() {
       body: JSON.stringify(toInput), // body data type must match "Content-Type" header
     });
     let body = await response.json();
+    setLoading(false);
     if (!response.ok) {
       console.log("Errors:", body);
       setErrors(body);
@@ -80,102 +83,104 @@ export default function SignUp() {
     doRegister(toInput);
   };
 
-  if (firstLoad) {
-    setLoad(false);
+  if (loading) {
+    return (
+      <ReactLoading type={"spin"} color={"blue"} height={100} width={100} />
+    );
+  } else {
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Grid container justify="center">
+            <Grid item>
+              <Link to="/">Already registered? Click here to Login?</Link>
+            </Grid>
+          </Grid>
+          <Avatar className={classes.avatar}>
+            <GroupIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Register User
+          </Typography>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="name"
+                  value={name}
+                  label="First Name"
+                  name="name"
+                  autoComplete="name"
+                  onChange={handleFirstNameChange}
+                  error={errors.name ? true : false}
+                  helperText={errors.name}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="surname"
+                  value={surname}
+                  label="Last Name"
+                  name="surname"
+                  autoComplete="surname"
+                  onChange={handleLastNameChange}
+                  error={errors.surname ? true : false}
+                  helperText={errors.surname}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  value={email}
+                  type="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  onChange={handleEmailChange}
+                  error={errors.email ? true : false}
+                  helperText={errors.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="password"
+                  name="password"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={password}
+                  type="password"
+                  id="password"
+                  label="Password"
+                  onChange={handlePasswordChange}
+                  error={errors.password ? true : false}
+                  helperText={errors.password}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              // type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </form>
+        </div>
+      </Container>
+    );
   }
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Grid container justify="center">
-          <Grid item>
-            <Link to="/">Already registered? Click here to Login?</Link>
-          </Grid>
-        </Grid>
-        <Avatar className={classes.avatar}>
-          <GroupIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register User
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                value={name}
-                label="First Name"
-                name="name"
-                autoComplete="name"
-                onChange={handleFirstNameChange}
-                error={errors.name ? true : false}
-                helperText={errors.name}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="surname"
-                value={surname}
-                label="Last Name"
-                name="surname"
-                autoComplete="surname"
-                onChange={handleLastNameChange}
-                error={errors.surname ? true : false}
-                helperText={errors.surname}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                value={email}
-                type="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                onChange={handleEmailChange}
-                error={errors.email ? true : false}
-                helperText={errors.email}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="password"
-                name="password"
-                variant="outlined"
-                required
-                fullWidth
-                value={password}
-                type="password"
-                id="password"
-                label="Password"
-                onChange={handlePasswordChange}
-                error={errors.password ? true : false}
-                helperText={errors.password}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            // type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </form>
-      </div>
-    </Container>
-  );
 }

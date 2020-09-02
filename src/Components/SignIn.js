@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import ReactLoading from "react-loading";
 import { API_URL } from "../config";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,18 +40,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
-  const [firstLoad, setLoad] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   let history = useHistory();
 
-  const [username, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleUserNameChange = (event) => setName(event.target.value);
+  const handleEmailChange = (event) => setEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
 
   const [errors, setErrors] = React.useState({});
 
   async function doLogin(toInput) {
+    setLoading(true);
     let response = await fetch(`${API_URL}sign-in`, {
       method: "POST",
       headers: {
@@ -59,6 +61,7 @@ export default function SignIn() {
       body: JSON.stringify(toInput), // body data type must match "Content-Type" header
     });
     let body = await response.json();
+    setLoading(false);
     if (!response.ok) {
       console.log("Errors:", body);
       setErrors(body);
@@ -69,78 +72,77 @@ export default function SignIn() {
   }
 
   const handleSubmit = (variables) => {
-    const toInput = { username, password };
+    const toInput = { email, password };
     doLogin(toInput);
   };
+  if (loading) {
+    return (
+      <ReactLoading type={"spin"} color={"blue"} height={100} width={100} />
+    );
+  } else {
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
 
-  if (firstLoad) {
-    // sampleFunc();
-    setLoad(false);
-  }
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <GroupIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                value={username}
-                label="User Name"
-                name="username"
-                autoComplete="username"
-                onChange={handleUserNameChange}
-                error={errors.username ? true : false}
-                helperText={errors.username}
-              />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <GroupIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Login
+          </Typography>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  value={email}
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  onChange={handleEmailChange}
+                  error={errors.email ? true : false}
+                  helperText={errors.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="password"
+                  name="password"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="password"
+                  value={password}
+                  id="password"
+                  label="Password"
+                  onChange={handlePasswordChange}
+                  error={errors.password ? true : false}
+                  helperText={errors.password}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="password"
-                name="password"
-                variant="outlined"
-                required
-                fullWidth
-                type="password"
-                value={password}
-                id="password"
-                label="Password"
-                onChange={handlePasswordChange}
-                error={errors.password ? true : false}
-                helperText={errors.password}
-              />
-            </Grid>
-            
+            <Button
+              // type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </form>
+        </div>
+        <Grid container justify="center">
+          <Grid item>
+            <Link to="/signup">New User? Click here to register?</Link>
           </Grid>
-          <Button
-            // type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </form>
-      </div>
-      <Grid container justify="center">
-        <Grid item>
-          <Link to="/signup">New User? Click here to register?</Link>
         </Grid>
-      </Grid>
-    </Container>
-  );
+      </Container>
+    );
+  }
 }
