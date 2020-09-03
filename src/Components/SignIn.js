@@ -60,6 +60,7 @@ export default function SignIn() {
       .then((res) => {
         setLoading(false);
         console.log("Success:", res.data);
+        localStorage.setItem('authenticated', true);
         history.push("/dashboard");
       }) // re-direct to login on successful register
       .catch((err) => {

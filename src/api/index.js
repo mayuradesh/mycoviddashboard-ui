@@ -21,12 +21,12 @@ export const loginUser = (payload) =>
     },
   });
 
-export const getHello = () => api.get(`/home`);
+export const getCovidStatus = () => api.get(`covid-status`);
 
 const apis = {
   registerUser,
   loginUser,
-  getHello,
+  getCovidStatus,
 };
 
 export default apis;
