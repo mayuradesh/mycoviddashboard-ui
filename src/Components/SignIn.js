@@ -61,7 +61,7 @@ export default function SignIn() {
         setLoading(false);
         console.log("Success:", res.data);
         localStorage.setItem('authenticated', true);
-        history.push("/dashboard");
+        window.location.href = "./dashboard";;
       }) // re-direct to login on successful register
       .catch((err) => {
         setLoading(false);
@@ -86,7 +86,6 @@ export default function SignIn() {
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <GroupIcon />
