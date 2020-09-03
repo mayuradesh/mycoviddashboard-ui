@@ -2,6 +2,8 @@ import React from "react";
 
 import { Link, useHistory } from "react-router-dom";
 
+import { makeStyles } from "@material-ui/core/styles";
+
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,11 +11,10 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import GroupIcon from "@material-ui/icons/Group";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
-import { API_URL } from "../config";
 import CircularProgress from "@material-ui/core/CircularProgress";
+
+import api from "../api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,24 +59,19 @@ export default function SignUp() {
   const [errors, setErrors] = React.useState({});
 
   async function doRegister(toInput) {
-    console.log(JSON.stringify(toInput));
     setLoading(true);
-    let response = await fetch(`${API_URL}sign-up`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(toInput), // body data type must match "Content-Type" header
-    });
-    let body = await response.json();
-    setLoading(false);
-    if (!response.ok) {
-      console.log("Errors:", body);
-      setErrors(body);
-    } else {
-      console.log("Success:", body);
+    api
+    .registerUser(JSON.stringify(toInput))
+    .then((res) => {
+      setLoading(false);
+      console.log("Success:", res.data);
       history.push("/");
-    }
+    }) // re-direct to login on successful register
+    .catch((err) => {
+      setLoading(false);
+      console.log("Errors:", err.response.data);
+      setErrors(err.response.data);
+    });
   }
 
   const handleSubmit = (variables) => {
@@ -86,7 +82,9 @@ export default function SignUp() {
   if (loading) {
     return (
       <Container component="main" maxWidth="xs">
-        <CircularProgress />
+        <div className={classes.paper}>
+          <CircularProgress />
+        </div>
       </Container>
     );
   } else {
