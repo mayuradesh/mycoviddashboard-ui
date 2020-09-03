@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import ReactLoading from "react-loading";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { API_URL } from "../config";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +77,9 @@ export default function SignIn() {
   };
   if (loading) {
     return (
-      <ReactLoading type={"spin"} color={"blue"} height={100} width={100} />
+      <Container component="main" maxWidth="xs">
+        <CircularProgress />
+      </Container>
     );
   } else {
     return (

@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import { API_URL } from "../config";
-import ReactLoading from "react-loading";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -85,7 +85,9 @@ export default function SignUp() {
 
   if (loading) {
     return (
-      <ReactLoading type={"spin"} color={"blue"} height={100} width={100} />
+      <Container component="main" maxWidth="xs">
+        <CircularProgress />
+      </Container>
     );
   } else {
     return (
